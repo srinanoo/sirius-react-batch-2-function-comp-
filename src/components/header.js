@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import axiosAPI from "../axios";
 
 function Header(props) {
 
@@ -9,6 +10,8 @@ function Header(props) {
 
     let usernameRef = useRef("");
     let passwordRef = useRef("");
+
+    const [contact, setContact] = useState(false);
 
     const [counter, setCounter] = useState(0);
     const [title, setTitle] = useState("Initial Title");
@@ -29,14 +32,22 @@ function Header(props) {
 
     // useEffect(() => {
     //     console.log("useEffect for both title and counter");
-    //     fetch('http://localhost:4000')
+    //     fetch('http://localhost:4000', {method: "PUT"})
     //         .then(res => res.json())
     //         .then(res => {
     //             console.log(res);
     //             // if(title !== res)
     //                 setTitle(res);
     //         });
-    // },[title, counter]);
+        
+    //     axios.get('http://localhost:4000')
+    //         .then(res => res.json())
+    //         .then(res => {
+    //             console.log(res);
+    //             // if(title !== res)
+    //                 setTitle(res);
+    //         })
+    // },[title]);
 
     
 
@@ -52,6 +63,18 @@ function Header(props) {
         console.log(username, password, "State CLICKED METHOD");
         let data = { "username": username, "password": password }
         console.log(data);
+        console.log(process.env.REACT_APP_API_URL);
+        axiosAPI.post(`/postData`, data)
+            .then(res => {
+                if(res)
+                    setContact(true);
+            });
+            // .then(res => res.json())
+            // .then(res => {
+            //     console.log(res);
+            //     // if(title !== res)
+            //         setTitle(res);
+            // })
     }
 
     const handleFormClickRef = () => { // useRef (NEXT PREFERRED ACTION)
@@ -77,8 +100,8 @@ function Header(props) {
         <>
             <h1>Header Container</h1>
             {/* <p>Name is: {props.name}</p> */}
-            <p>Title is: {title}</p>
-            <p>Old Title was: {titleRef.current.value}</p>
+            {/* <p>Title is: {title}</p>
+            <p>Old Title was: {titleRef.current.value}</p> */}
             {/* <p>Counter is: {counter}</p> */}
             {/* <p>
                 Data: {data.img}, {data.title}, {data.description}
@@ -86,7 +109,7 @@ function Header(props) {
             {/* <input type="text" ref={titleRef}  />
             <p><button onClick={changeTitle}>Change Title</button></p> */}
 
-            <div>
+            {/* <div>
                 <input type="text" placeholder="Username:" onChange={(e) => setUsername(e.target.value)} /><br />
                 <input type="text" placeholder="Password:" onChange={(e) => setPassword(e.target.value)} /><br />
                 <button type="button" onClick={handleFormClick}>Submit</button>
@@ -109,6 +132,10 @@ function Header(props) {
                     <button type="submit">Submit</button>
                 </form>
             </div>
+
+            {
+                contact && <>THANK YOU FOR SUBMITTING THE FORM</>
+            } */}
         </>
     )
 }
